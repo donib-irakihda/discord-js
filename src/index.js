@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Client, IntentsBitField } = require("discord.js");
+const { Client, IntentsBitField, ActivityType } = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -10,8 +10,36 @@ const client = new Client({
   ],
 });
 
+let status = [
+  {
+    name: "Manchester City",
+    type: ActivityType.Listening,
+    url: "https://www.youtube.com/watch?v=q1xpyUbUhmk",
+  },
+  {
+    name: "De Bruyne City",
+    type: ActivityType.Watching,
+    url: "https://www.youtube.com/watch?v=q1xpyUbUhmk",
+  },
+  {
+    name: "Haaland City",
+    type: ActivityType.Streaming,
+    url: "https://www.youtube.com/watch?v=q1xpyUbUhmk",
+  },
+  {
+    name: "Pep City",
+    type: ActivityType.Playing,
+    url: "https://www.youtube.com/watch?v=q1xpyUbUhmk",
+  },
+];
+
 client.on("ready", (c) => {
   console.log(`✅ ${c.user.tag} is running...`);
+
+  setInterval(() => {
+    let random = Math.floor(Math.random() * status.length);
+    client.user.setActivity(status[random]);
+  }, 10 * 1000);
 });
 
 client.on("interactionCreate", async (interaction) => {
