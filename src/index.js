@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Client, IntentsBitField } = require("discord.js");
+const { Client, IntentsBitField, EmbedBuilder } = require("discord.js");
 
 const client = new Client({
   intents: [
@@ -14,13 +14,60 @@ client.on("ready", (c) => {
   console.log(`✅ ${c.user.tag} is running...`);
 });
 
+client.on("interactionCreate", (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "embed") {
+    const embed = new EmbedBuilder()
+      .setTitle("Embed Title")
+      .setDescription("its an embed description")
+      .setColor("Random")
+      .addFields(
+        {
+          name: "Field Title",
+          value: "some random value",
+          inline: true,
+        },
+        {
+          name: "Field Title",
+          value: "some random value",
+          inline: true,
+        }
+      );
+
+    interaction.reply({ embeds: [embed] });
+  }
+});
+
+client.on("messageCreate", (message) => {
+  if (message.content === "embed") {
+    const embed = new EmbedBuilder()
+      .setTitle("Embed Title")
+      .setDescription("its an embed description")
+      .setColor("Random")
+      .addFields(
+        {
+          name: "Field Title",
+          value: "some random value",
+          inline: true,
+        },
+        {
+          name: "2nd Field Title",
+          value: "some random value",
+          inline: true,
+        }
+      );
+    message.channel.send({ embeds: [embed] });
+  }
+});
+
 client.on("messageCreate", (message) => {
   if (message.author.bot) {
     return;
   }
   if (message.content == "hi") {
     message.react("✅");
-    message.reply("hi");
+    message.channel.send("hi");
   }
 });
 
